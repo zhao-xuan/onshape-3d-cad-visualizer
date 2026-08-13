@@ -1,0 +1,1 @@
+'use client'; export default function DescriptionPanel({selectedComponentId}:{ selectedComponentId?: string }) { return <div className='text-white p-4'>Description Panel</div>; }; export const mockData: Array<{ id:string; displayName: string }[]> = [];

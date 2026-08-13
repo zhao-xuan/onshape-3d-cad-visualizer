@@ -1,55 +1,50 @@
-export default function Home() {
+'use client';
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+
+const mockModels = [
+  { slug: 'ac-motor', name: 'Simple AC Motor Assembly', description: 'Industrial single-phase motor assembly' },
+  { slug: 'product-alpha', name: 'Product Alpha Prototype', description: 'Motor mount prototype v3 - complete BOM' },
+];
+
+export default function HomePage() {
   return (
-    <main className="max-w-7xl mx-auto px-6 py-12 md:py-20">
-      <div className="text-center space-y-8 max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-balance">
-          Onshape 3D CAD Visualizer
-        </h1>
-        <p className="mx-auto max-w-[700px] text-lg md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-muted-foreground">
-          A professional platform for managing and presenting interactive Onshape 3D CAD assemblies with specification databases, change tracking, and an intuitive admin interface.
-        </p>
+    <div className="min-h-screen bg-slate-950 text-white">
+      <header className="border-b border-slate-800 px-8 py-6">
+        <h1 className="text-3xl font-bold">Onshape CAD Visualizer</h1>
+        <p className="text-slate-400 mt-2">Interactive 3D assembly viewer & component database</p>
+      </header>
 
-        {/* Feature grid */}
-        <div className="grid gap-8 mt-16 md:grid-cols-3">
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold text-balance leading-tight sm:text-xl lg:text-2xl">Interactive Viewer</h3>
-            <p className="text-sm/relaxed text-muted-foreground">
-              Real-time WebGL rendering of CAD assemblies with part selection, search, and detailed specifications. Built on Three.js for professional quality visualization.
-            </p>
+      <main className="px-8 py-12 max-w-5xl mx-auto">
+        <section className="mb-12 text-center">
+          <h2 className="text-xl font-semibold mb-4">Featured Assemblies</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {mockModels.map((m) => (
+              <Link key={m.slug} href={`/models/${m.slug}`}>
+                <article className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
+                  <h3 className="text-lg font-semibold mb-2">{m.name}</h3>
+                  <p className="text-sm text-slate-400">{m.description}</p>
+                </article>
+              </Link>
+            ))}
           </div>
+        </section>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold text-balance leading-tight sm:text-xl lg:text-2xl">Component Database</h3>
-            <p className="text-sm/relaxed text-muted-foreground">
-              Comprehensive component metadata management with human-authored descriptions, dimensions, and custom specifications independent of CAD structure changes.
-            </p>
-          </div>
+        <section className="bg-indigo-600/20 border border-indigo-500/30 rounded-xl p-8">
+          <h3 className="text-lg font-semibold mb-3 text-indigo-400">Features</h3>
+          <ul className="grid md:grid-cols-2 gap-3 text-sm text-slate-300">
+            <li>✓ Interactive Three.js 3D viewer</li>
+            <li>✓ Component selection & highlighting</li>
+            <li>✓ Detailed engineering specs panel</li>
+            <li>✓ Mock CAD provider (Dev)</li>
+          </ul>
+        </section>
+      </main>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold text-balance leading-tight sm:text-xl lg:text-2xl">Change Tracking</h3>
-            <p className="text-sm/relaxed text-muted-foreground">
-              Version comparison for CAD revisions with automatic detection of new, changed, and removed components. Review workflow keeps human content separate from geometry updates.
-            </p>
-          </div>
-
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 pt-8 justify-center">
-          <a 
-            href="/models/product-alpha"
-            className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground shadow transition-colors hover:bg-muted/90"
-          >
-            View Demo Model
-          </a>
-          
-          <a 
-            href="/admin"
-            className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
-          >
-            Admin CMS Preview
-          </a>
-        </div>
-      </div>
-    </main>
+      <footer className="border-t border-slate-800 px-8 py-6 text-center text-sm text-slate-500">
+        Built with Next.js, React Three Fiber & @react-three/drei
+      </footer>
+    </div>
   );
 }

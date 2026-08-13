@@ -73,6 +73,47 @@ export const cadRevisions = pgTable('cad_revisions', {
   };
 });
 
+/** Component Specifications - Flexible custom specification fields */
+export const componentSpecifications = pgTable('component_specifications', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  
+  /** Link to definition (nullable for orphaned specs in transition) */
+  componentDefinitionId: uuid('cad_component_id')
+    .references(() => componentDefinitions.id, { onDelete: 'cascade' }),
+  
+  specificationKey: varchar('specification_key', { length: 64 }).notNull(),
+  label: varchar('label', { length: 128 }), // Human-readable label if not from template
+  
+  /** Specification type determines UI rendering and validation */
+  specType: varchar('spec_type', { 
+    length: 16, 
+    check: "spec_type IN ('text' OR 'number' OR 'boolean' OR 'select' OR 'url' OR 'measurement')" 
+  }).notNull().default('text'),
+  
+  valueText: text('value_text'), // For string/select/url types
+  
+  valueNumber: decimal('value_number', { precision: 18, scale: 6 }), // For number/measurement types
+  
+  valueBoolean: boolean('value_boolean'), // For boolean type
+  
+  options: jsonb('options').$type<string[]>(), // For select dropdowns [option1, option2]
+  
+  unit: varchar('unit', { length: 16 }), // e.g., 'mm', 'kg', '%'; for measurement types
+  
+  order: integer('order').notNull().default(0), // Display ordering within spec panel
+  
+  templateId: text('template_id'), // Reference to standardized spec templates if applicable
+}, (table) => {
+  return {
+    componentDefIdx: index('component_specs_component_idx').on(table.componentDefinitionId),
+    keyUnique: pgTable.uniqueConstraints('componentSpecifications', {}).on(
+      table.componentDefinitionId,
+      table.specificationKey
+    ),
+    specTypeIdx: index('component_specs_type_idx').on(table.specType)
+  };
+});
+
 /** Component Definitions - Logical component identity independent of CAD */
 export const componentDefinitions = pgTable('component_definitions', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -91,12 +132,28 @@ export const componentDefinitions = pgTable('component_definitions', {
   description: text('description'),       // Longer form documentation (markdown)
   functionality: text('functionality'),   // What does it do?
   
+  /** Manual dimensions - user-entered, never overwritten by sync */
+  manualWidth: decimal('manual_width', { precision: 10, scale: 2 }),
+  manualHeight: decimal('manual_height', { precision: 10, scale: 2 }),
+  manualDepth: decimal('manual_depth', { precision: 10, scale: 2 }),
+  manualUnit: varchar('manual_unit', { length: 8 }).notNull().default('mm'),
+
+  /** CAD auto-derived dimensions - from geometry, never overwrite manual */
+  cadMinX: decimal('cad_min_x', { precision: 10, scale: 4 }),
+  cadMaxX: decimal('cad_max_x', { precision: 10, scale: 4 }),
+  cadMinY: decimal('cad_min_y', { precision: 10, scale: 4 }),
+  cadMaxY: decimal('cad_max_y', { precision: 10, scale: 4 }),
+  cadMinZ: decimal('cad_min_z', { precision: 10, scale: 4 }),
+  cadMaxZ: decimal('cad_max_z', { precision: 10, scale: 4 }),
+
   /** Material and physical info - may be CAD-derived or manual override */
   material: text('material'),                     // Manual/material field
   customMetadata: jsonb('custom_metadata').$type<Record<string, any>>().default({}),
     
   publicationStatus: varchar('publication_status', { length: 16 }).notNull().default('draft'),
   
+  featured: boolean('featured').notNull().default(false), // Hotspot indicator for viewer
+    
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (table) => {
@@ -142,10 +199,9 @@ export const componentOccurrences = pgTable('component_occurrences', {
   /** Visibility */
   isSuppressed: boolean('is_suppressed').notNull().default(false),
   isVisible: boolean('is_visible').notNull().default(true),
-  
-  // Source origin information for traceability
+    
   sourceDocumentUrl: text('source_document_url'),
-
+    
 }, (table) => {
   return {
     cadRevisionIdIdx: index('component_occurrences_cad_revision_id_idx').on(table.cadRevisionId),
@@ -161,14 +217,14 @@ export const cadEntityMappings = pgTable('cad_entity_mappings', {
   cadRevisionId: uuid('cad_revision_id')
     .references(() => cadRevisions.id, { onDelete: 'cascade' })
     .notNull(),
-    
+      
   componentDefinitionId: uuid('component_definition_id')
     .references(() => componentDefinitions.id, { onDelete: 'set null' }),
   
   cadComponentId: text('cad_component_id').notNull(), // The CAD identifier
   
   matchesPreviouslyMapped: boolean('matches_previously_mapped').default(false),
-  
+    
   /** Reasonable confidence - set by identity resolution system or manually flagged */
   mappingConfidence: varchar('mapping_confidence', { length: 16 }).$type<'high' | 'medium' | 'low' | null>().default(null),
   notes: text('notes'), // When mapping is ambiguous

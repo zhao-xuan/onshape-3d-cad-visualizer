@@ -10,5 +10,6 @@ export type {
   cadRevisions,
   componentDefinitions, 
   componentOccurrences, 
-  cadEntityMappings
+  cadEntityMappings,
+  componentSpecifications
 } from './schema';

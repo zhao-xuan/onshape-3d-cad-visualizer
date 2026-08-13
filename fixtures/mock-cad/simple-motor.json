@@ -1,0 +1,141 @@
+{
+  "assemblyId": "simple-ac-motor",
+  "name": "Simple AC Motor Assembly",
+  "revisions": [
+    {
+      "revisionId": "rev-v1-001",
+      "timestamp": "2026-08-13T00:00:00Z",
+      "sourceUrl": "file://mock-simmotor.glb"
+    }
+  ],
+  "components": [
+    {
+      "componentId": "stator",
+      "displayName": "Stator",
+      "partNumber": "STM-001",
+      "category": "electrical",
+      "status": "published",
+      "shortDescription": "Fixed outer iron core with winding slots.",
+      "description": "The stator is the stationary part of the motor containing laminated silicon steel stacks and copper windings. It generates the rotating magnetic field when AC power is applied.",
+      "dimensions": {
+        "cadDimensions": {"x": 100, "y": 80, "z": 120, "unit": "mm"},
+        "manualDimensions": {}
+      },
+      "material": "Silicon steel laminations",
+      "weight": 2.5,
+      "tags": ["stator", "motor-core", "stationary"],
+      "nodeMap": {
+        "StatorBody": {"componentId": "stator", "occurrenceId": "stator-1"},
+        "CopperWinding_A": {"componentId": "stator", "occurrenceId": "winding-a"},
+        "CopperWinding_B": {"componentId": "stator", "occurrenceId": "winding-b"}
+      }
+    },
+    {
+      "componentId": "rotor",
+      "displayName": "Rotor",
+      "partNumber": "ROT-001",
+      "category": "electrical",
+      "status": "published",
+      "shortDescription": "Rotating inner core with squirrel cage windings.",
+      "description": "The rotor rotates inside the stator. This is a simple squirrel-cage design with aluminum bars shorted by end rings, creating induced currents that produce torque.",
+      "dimensions": {
+        "cadDimensions": {"x": 60, "y": 85, "z": 120, "unit": "mm"},
+        "manualDimensions": {}
+      },
+      "material": "Steel core with aluminum squirrel cage",
+      "weight": 1.2,
+      "tags": ["rotor", "squirrel-cage"],
+      "nodeMap": {
+        "RotorCore": {"componentId": "rotor", "occurrenceId": "rotor-core"},
+        "AluminumCage_Bars": {"componentId": "rotor", "occurrenceId": "cage-bars"}
+      }
+    },
+    {
+      "componentId": "housing",
+      "displayName": "Motor Housing",
+      "partNumber": "HSG-001",
+      "category": "structural",
+      "status": "published",
+      "shortDescription": "Cast aluminum outer casing with mounting feet.",
+      "description": "The housing encloses and protects internal components. Features four M8 mounting holes for secure installation. Includes cooling fins on the exterior surface to dissipate heat from operations.",
+      "dimensions": {
+        "cadDimensions": {"x": 120, "y": 150, "z": 240, "unit": "mm"},
+        "manualDimensions": {}
+      },
+      "material": "Cast aluminum alloy A380",
+      "weight": 3.8,
+      "tags": ["housing", "frame", "mounting"],
+      "nodeMap": {
+        "OuterShell": {"componentId": "housing", "occurrenceId": "housing-shell"},
+        "MountingFeet_L": {"componentId": "housing", "occurrenceId": "foot-left"},
+        "MountingFeet_R": {"componentId": "housing", "occurrenceId": "foot-right"}
+      }
+    },
+    {
+      "componentId": "end-frames",
+      "displayName": "End Frames (Pair)",
+      "partNumber": "FRM-001",
+      "category": "structural",
+      "status": "draft",
+      "shortDescription": "Aluminum alloy end bells supporting bearings.",
+      "description": "Two identical aluminum die-cast pieces that close the motor housing and support precision ball bearings for the rotor shaft. Features bearing retaining rings.\n\nStatus: Needs engineering review for bearing selection.",
+      "dimensions": {
+        "cadDimensions": {"x": 105, "y": 20, "z": 130, "unit": "mm"},
+        "manualDimensions": {}
+      },
+      "material": "Die-cast aluminum",
+      "weight": 0.9,
+      "tags": ["bearings", "frames"],
+      "nodeMap": {
+        "EndFrame_Left": {"componentId": "end-frames", "occurrenceId": "frame-left"},
+        "EndFrame_Right": {"componentId": "end-frames", "occurrenceId": "frame-right"}
+      }
+    },
+    {
+      "componentId": "shaft",
+      "displayName": "Drive Shaft",
+      "partNumber": "SHAFT-HR",
+      "category": "mechanical",
+      "status": "published",
+      "shortDescription": "Hardened steel shaft with keyway for load transfer.",
+      "description": "The main drive shaft transmits mechanical torque from the rotor to external loads. Constructed from 4130 chromemolybdenum steel, heat treated and ground for precise running fit.",
+      "dimensions": {
+        "cadDimensions": {"x": 25, "y": 25, "z": 280, "unit": "mm"},
+        "manualDimensions": {}
+      },
+      "material": "4130 Steel (heat treated)",
+      "weight": 0.6,
+      "tags": ["shaft", "drive-component"],
+      "nodeMap": {
+        "RotatingShaft_Core": {"componentId": "shaft", "occurrenceId": "main-shaft"}
+      }
+    },
+    {
+      "componentId": "cooling-fan",
+      "displayName": "Cooling Fan and Cover",
+      "partNumber": "FAN-001",
+      "category": "mechanical",
+      "status": "published",
+      "shortDescription": "Propeller fan with protective wire guard cage.",
+      "description": "External cooling system consisting of a propeller fan mounted externally to the shaft. A 3-point steel wire mesh provides protection while maintaining adequate airflow for thermal management.",
+      "dimensions": {
+        "cadDimensions": {"x": 90, "y": 45, "z": 70, "unit": "mm"},
+        "manualDimensions": {}
+      },
+      "material": "Engineering plastic with steel guard",
+      "weight": 0.3,
+      "tags": ["cooling", "fan"],
+      "nodeMap": {
+        "FanBlades_Hub": {"componentId": "cooling-fan", "occurrenceId": "fan-hub"},
+        "SteelGuard_Cage": {"componentId": "cooling-fan", "occurrenceId": "guard-cage"}
+      }
+    }
+  ],
+  "metadata": {
+    "description": "A simple three-phase induction AC motor assembly for industrial applications.",
+    "totalWeight": 9.3,
+    "specificationsUrl": null,
+    "drawingsFolderId": null,
+    "manufacturer": "Mock Industries Inc"
+  }
+}

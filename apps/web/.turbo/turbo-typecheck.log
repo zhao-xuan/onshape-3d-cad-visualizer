@@ -1,0 +1,4 @@
+
+> @app/web@0.1.0 typecheck /Users/tomzhao/Projects/onshape-3d-cad-visualizer/apps/web
+> tsc --noEmit
+
