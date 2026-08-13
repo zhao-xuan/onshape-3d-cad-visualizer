@@ -1,0 +1,22 @@
+# Dependencies root packages
+node_modules/
+.pnpm-store/
+
+# Apps & Packages dist outputs  
+apps/*/dist/**
+packages/*/dist/**
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*~
+
+# Environment (except .env.example)
+.env.*
+!**.env.example**
+.local-env.sh
+.env.local
+.env.development
+.env.production

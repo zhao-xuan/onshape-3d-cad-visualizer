@@ -1,0 +1,9 @@
+{
+  "name": "@app/database",
+  "version": "0.1.0",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "drizzle-orm": "0.45.2",
+    "postgres": "3.4.9"
+  }
+}
